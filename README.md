@@ -2,7 +2,7 @@
 A simulator for mod farming strategies in SWGOH
 
 # Running the project
-The main loop is located in [Main.java](src/main/java/lazeb/swgoh/mods/simulator/Main). It can be executed with Maven using:
+The main loop is located in [Main.java](src/main/java/lazeb/swgoh/mods/simulator/Main.java). It can be executed with Maven using:
 
 ./mvnw clean install exec:java
 
