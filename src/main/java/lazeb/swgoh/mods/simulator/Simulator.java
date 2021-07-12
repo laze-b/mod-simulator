@@ -33,50 +33,30 @@ class Simulator {
     Results simulate(int numYears) {
         int numMonths = 12 * numYears;
         int numDays = 365 * numYears;
-        int numWeeks = numDays / 7;
         long dailyEnergyBudget = (240 + strategy.modEnergyDailyRefreshes * 120);
-        Results results = new Results(numMonths, numWeeks, strategy);
+        Resources resources = new Resources(dailyEnergyBudget, strategy.modCreditDailyBudget);
+        Results results = new Results(numMonths, strategy, resources);
 
         for (int i = 0; i < numDays; i++) {
-            results.energyBalance += dailyEnergyBudget;
-            results.creditBalance += strategy.modCreditDailyBudget;
-            while(results.energyBalance > 0 && results.creditBalance > 0) {
+            resources.addDailyResources();
+            while(resources.getEnergyBalance() > 0 && resources.getCreditBalance()  > 0) {
                 Mod mod = new Mod(randomizer);
-                results.farmedMods++;
-                processMod(results, mod);
+                processMod(results, resources, mod);
             }
-            while(results.creditBalance >= Const.creditsStoreGold) {
+            while(resources.getCreditBalance() >= Const.creditsStoreGold) {
                 Mod mod = createStoreMod();
-                results.storeMods++;
-                processMod(results, mod);
+                processMod(results, resources, mod);
             }
         }
 
         return results;
     }
 
-    private void processMod(Results results, Mod mod) {
+    private void processMod(Results results, Resources resources, Mod mod) {
         levelAndSlice(mod);
-        results.energyBalance -= mod.getEnergySpent();
-        results.creditBalance -= mod.getCreditsSpent();
-        if (keep(mod)) {
-            results.keptMods++;
-            if (mod.getPrimary().getStat() == Mod.PrimaryStat.SPEED) {
-                results.speedArrows++;
-            } else if (mod.visibleSpeed() < 5) {
-                results.speed0to4++;
-            } else if (mod.visibleSpeed() < 10) {
-                results.speed5to9++;
-            } else if (mod.visibleSpeed() < 15) {
-                results.speed10to14++;
-            } else if (mod.visibleSpeed() < 20) {
-                results.speed15to19++;
-            } else {
-                results.speed20plus++;
-            }
-        } else {
-            results.creditBalance += mod.creditValueIfSold();
-        }
+        boolean keep = keep(mod);
+        resources.substractModInvestment(mod, keep);
+        results.addMod(mod, keep);
     }
 
     private boolean keep(Mod mod) {

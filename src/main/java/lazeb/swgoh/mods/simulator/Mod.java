@@ -80,6 +80,8 @@ public class Mod {
     private int energySpent;
     private int creditsSpent;
 
+    private boolean fromStore;
+
     /**
      * Create a mod from energy.
      */
@@ -90,6 +92,7 @@ public class Mod {
         Primary p = randomizer.randomModPrimary();
         this.originalColor = c;
         this.creditsSpent = -7500;
+        this.fromStore = false;
         init(randomizer.randomModDot(), c, p, randomizer.randomModSecondaries(c, p.stat));
     }
 
@@ -103,6 +106,7 @@ public class Mod {
         }
         this.creditsSpent = Const.creditsStoreGold;
         this.originalColor = color;
+        this.fromStore = true;
         init(dot, color, primary, secondaries);
     }
 
@@ -143,6 +147,10 @@ public class Mod {
 
     public int getCreditsSpent() {
         return creditsSpent;
+    }
+
+    public boolean isFromStore() {
+        return fromStore;
     }
 
     public void increaseLevel() {

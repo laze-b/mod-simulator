@@ -26,7 +26,7 @@ class StrategyGenerator {
         Supplier<RangeIterator> purpleInitialSecondariesSupplier = () -> new RangeIterator(4, 4);
 
         // make some assumptions on "good" target slice speeds to narrow the iterations
-        Supplier<RangeIterator> graySliceSpeedSupplier = () -> new RangeIterator(3, 5);
+        Supplier<RangeIterator> graySliceSpeedSupplier = () -> new RangeIterator(3, 6);
         Supplier<RangeIterator> greenSliceSpeedSupplier = () -> new RangeIterator(5, 12);
         Supplier<RangeIterator> blueSliceSpeedSupplier = () -> new RangeIterator(7, 14);
         Supplier<RangeIterator> purpleSliceSpeedSupplier = () -> new RangeIterator(9, 14);
@@ -70,11 +70,8 @@ class StrategyGenerator {
                                                         graySlice, greenSlice, blueSlice, purpleSlice,
                                                         goldLevel, minKeep
                                                 );
-                                                try {
-                                                    strategy.validate();
+                                                if(strategy.validate()) {
                                                     strategies.add(strategy);
-                                                } catch (AssertionError e) {
-                                                    // invalid strategy
                                                 }
                                             }
                                         }
