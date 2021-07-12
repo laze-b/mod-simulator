@@ -67,12 +67,9 @@ public class Main {
         // 3rd pass: run all strategies for 2500 years, keep the top 10%
         strategies = results.stream().limit(strategyGenerator.getCount() / 10).flatMap(r -> Stream.of(r.strategy)).collect(Collectors.toList());
         strategyGenerator = new StrategyGenerator(strategies);
-        System.out.println("Third pass strategies evaluating: " + strategyGenerator.getCount());
+        System.out.println("Final pass strategies evaluating: " + strategyGenerator.getCount());
         results = simulateStrategies(2500, strategyGenerator);
-        printResults(results, "Third pass: ");
-
-        System.out.println("Winner:");
-        results.get(0).prettyPrint();
+        printResults(results, "Final pass: ");
     }
 
     private static void printResults(List<Results> results, String name) {

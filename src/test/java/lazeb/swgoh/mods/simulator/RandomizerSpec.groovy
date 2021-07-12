@@ -1,7 +1,5 @@
-package lazeb.mods.simulator
+package lazeb.swgoh.mods.simulator
 
-import lazeb.swgoh.mods.simulator.Mod
-import lazeb.swgoh.mods.simulator.Randomizer
 import spock.lang.Specification
 
 class RandomizerSpec extends Specification {
