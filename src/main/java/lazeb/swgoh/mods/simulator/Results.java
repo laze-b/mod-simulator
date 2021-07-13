@@ -36,7 +36,8 @@ public class Results implements Comparable<Results> {
      */
     double getScore() {
 //        return getSpeedGreaterThanEqual(15) * 1.0 / numMonths;
-        return getWeightedSpeedValue() / numMonths;
+//        return getWeightedSpeedValue() / numMonths;
+        return getWeightedSpeedPlusPotentialValue() / numMonths;
     }
 
     /**
