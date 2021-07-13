@@ -12,6 +12,8 @@ public interface Const {
     int creditsGreenSlice = 36000 - energyGreenSlice * 100;
     int creditsBlueSlice = 63000 - energyBlueSlice * 100;
     int creditsPurpleSlice = 90000 - energyPurpleSlice * 100;
+    // when we farm a new mod, we get a small amount of credits
+    int creditsNewModFarm = 7500;
     int creditsSellLessThan5Dot = 4900;
     int creditsSellLevel1to6 = 9500;
     int creditsSellLevel9 = 14900;

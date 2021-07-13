@@ -37,12 +37,14 @@ public class Mod {
     public static class Secondary {
         private final SecondaryStat stat;
         private int value;
+        private int count;
         private boolean visible;
 
         public Secondary(SecondaryStat stat, int value, boolean visible) {
             this.stat = stat;
             this.value = value;
             this.visible = visible;
+            this.count = 1;
         }
 
         public SecondaryStat getStat() {
@@ -53,8 +55,13 @@ public class Mod {
             return value;
         }
 
-        public void setValue(int value) {
-            this.value = value;
+        public int getCount() {
+            return count;
+        }
+
+        public void increaseValue(int amount) {
+            this.value += amount;
+            this.count++;
         }
 
         public boolean isVisible() {
@@ -91,7 +98,7 @@ public class Mod {
         Color c = randomizer.randomModColor();
         Primary p = randomizer.randomModPrimary();
         this.originalColor = c;
-        this.creditsSpent = -7500;
+        this.creditsSpent = -Const.creditsNewModFarm;
         this.fromStore = false;
         init(randomizer.randomModDot(), c, p, randomizer.randomModSecondaries(c, p.stat));
     }
@@ -201,7 +208,7 @@ public class Mod {
         if(hidden.isEmpty()) {
             throw new IllegalStateException("Cannot reveal secondary since all are visible");
         } else {
-            hidden.get(randomizer.randomSecondaryToReveal(hidden.size())).visible = true;
+            hidden.get(randomizer.randomSecondaryToReveal(hidden.size())).setVisible(true);
         }
     }
 
@@ -211,7 +218,7 @@ public class Mod {
         } else {
             Secondary secondaryToIncrease = secondaries.get(randomizer.randomSecondaryToIncrease());
             if(secondaryToIncrease.stat == SecondaryStat.SPEED) {
-                secondaryToIncrease.value += randomizer.randomSecondarySpeedIncrease();
+                secondaryToIncrease.increaseValue(randomizer.randomSecondarySpeedIncrease());
             }
         }
     }
@@ -261,9 +268,12 @@ public class Mod {
         }
     }
 
+    public Optional<Mod.Secondary> visibleSpeedSecondary() {
+        return secondaries.stream().filter(s -> s.stat == SecondaryStat.SPEED && s.visible).findAny();
+    }
+
     public int visibleSpeed() {
-        Optional<Secondary> speedSecondary = secondaries.stream().filter(s -> s.stat == SecondaryStat.SPEED && s.visible).findAny();
-        return speedSecondary.map(secondary -> secondary.value).orElse(0);
+        return visibleSpeedSecondary().map(Secondary::getValue).orElse(0);
     }
 
     public int potentialSecondaryIncreasesFromLeveling() {

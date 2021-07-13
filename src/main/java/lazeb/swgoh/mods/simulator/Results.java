@@ -1,6 +1,7 @@
 package lazeb.swgoh.mods.simulator;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -10,7 +11,8 @@ public class Results implements Comparable<Results> {
     private long farmedMods;
     private long storeMods;
     private long keptMods;
-    private Map<Integer, Integer> speedMap = new TreeMap<>();
+    // [key=speed, value=[key=speedIncreases, value=numMods]]
+    private Map<Integer, Map<Integer, Integer>> speedMap = new TreeMap<>();
     private long speedArrows;
 
     private final int numMonths;
@@ -37,29 +39,65 @@ public class Results implements Comparable<Results> {
         return getWeightedSpeedValue() / numMonths;
     }
 
+    /**
+     * Simple value function - count of speed over threshold.
+     */
     long getSpeedGreaterThanEqual(int speed) {
-        Set<Integer> keys = speedMap.keySet().stream().filter(k -> k >= speed).collect(Collectors.toSet());
+        Set<Integer> speeds = speedMap.keySet().stream().filter(k -> k >= speed).collect(Collectors.toSet());
         int count = 0;
-        for(int key : keys) {
-            count += speedMap.get(key);
+        for (int nextSpeed : speeds) {
+            count += speedMap.get(nextSpeed).values().stream().mapToInt(i -> i).sum();
         }
         return count;
     }
 
+    /**
+     * More complex value function taking individual speeds into account.
+     */
     double getWeightedSpeedValue() {
         double score = 0;
-        for(int speed : speedMap.keySet()) {
-            if(speed >= 15) {
-                int count = speedMap.get(speed);
-                // fitted function so speed 15=1, 20=2, 25=4
-                score += count * (1 + 0.08 * Math.pow(speed - 15, 1.57));
+        for (int speed : speedMap.keySet()) {
+            int count = speedMap.get(speed).values().stream().mapToInt(i -> i).sum();
+            // fitted function so speed 15=1, 20=2, 25=4
+            score += count * getCurrentSpeedValue(speed);
+        }
+        return score;
+    }
+
+    /**
+     * Even more complex value function taking speed + speed potential into account.
+     */
+    double getWeightedSpeedPlusPotentialValue() {
+        double score = 0;
+        for (int speed : speedMap.keySet()) {
+            Map<Integer, Integer> speedIncreaseMap = speedMap.get(speed);
+            for (int speedIncreases : speedIncreaseMap.keySet()) {
+                int count = speedIncreaseMap.get(speedIncreases);
+                score += count * getCurrentAndPotentialSpeedValue(speed, speedIncreases);
             }
         }
         return score;
     }
 
+    private static double getCurrentSpeedValue(int speed) {
+        // current value: fitted function so speed 15=1, 20=3, 25=6
+        return speed < 15 ? 0 : 1 + 0.08 * Math.pow(speed - 15, 2);
+    }
+
+    private static double getCurrentAndPotentialSpeedValue(int speed, int speedIncreases) {
+        // potential value: same as current, but scaled down
+        int potentialSpeed = speed + 4 * (4 - speedIncreases) + 2 * (5 - speedIncreases);
+        double value = 0;
+        if(speed >= 15) {
+            value += getCurrentSpeedValue(speed);
+            if(potentialSpeed > speed)
+                value += 0.3 * getCurrentSpeedValue(potentialSpeed);
+        }
+        return value;
+    }
+
     void addMod(Mod mod, boolean keep) {
-        if(mod.isFromStore()) {
+        if (mod.isFromStore()) {
             storeMods++;
         } else {
             farmedMods++;
@@ -69,9 +107,13 @@ public class Results implements Comparable<Results> {
             if (mod.getPrimary().getStat() == Mod.PrimaryStat.SPEED) {
                 speedArrows++;
             } else {
-                int speed = mod.visibleSpeed();
-                int count = speedMap.computeIfAbsent(speed, k -> 0);
-                speedMap.put(speed, count + 1);
+                Optional<Mod.Secondary> speedSecondary = mod.visibleSpeedSecondary();
+                int speed = speedSecondary.map(Mod.Secondary::getValue).orElse(0);
+                int speedIncreases = speedSecondary.map(Mod.Secondary::getCount).orElse(0);
+                Map<Integer, Integer> speedHitMap = speedMap.computeIfAbsent(speed, k -> new TreeMap<>());
+                speedMap.put(speed, speedHitMap);
+                int numMods = speedHitMap.computeIfAbsent(speedIncreases, k -> 0);
+                speedHitMap.put(speedIncreases, numMods + 1);
             }
         }
     }

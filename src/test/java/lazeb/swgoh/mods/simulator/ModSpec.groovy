@@ -26,7 +26,7 @@ class ModSpec extends Specification {
         mod.primary.stat == Mod.PrimaryStat.NOTSPEED
         mod.level == 1
         mod.energySpent == 16
-        mod.creditsSpent == 0
+        mod.creditsSpent == -7500
         mod.creditValueIfSold() == 4900
 
         when:
@@ -98,7 +98,7 @@ class ModSpec extends Specification {
         mod.primary.stat == Mod.PrimaryStat.SPEED
         mod.level == 15
         mod.energySpent == 16
-        mod.creditsSpent == 248400
+        mod.creditsSpent == 240900
         mod.creditValueIfSold() == 97200
 
         when:
@@ -127,7 +127,7 @@ class ModSpec extends Specification {
 
         expect:
         mod.level == 1
-        mod.creditsSpent == 0
+        mod.creditsSpent == -7500
         !mod.secondaries[0].visible
         !mod.secondaries[1].visible
         !mod.secondaries[2].visible
@@ -139,7 +139,7 @@ class ModSpec extends Specification {
 
         then:
         mod.level == 3
-        mod.creditsSpent == 6900
+        mod.creditsSpent == -600
         mod.secondaries[0].visible
         !mod.secondaries[1].visible
         !mod.secondaries[2].visible
@@ -151,7 +151,7 @@ class ModSpec extends Specification {
 
         then:
         mod.level == 6
-        mod.creditsSpent == 18400
+        mod.creditsSpent == 10900
         mod.secondaries[0].visible
         mod.secondaries[1].visible
         !mod.secondaries[2].visible
@@ -163,7 +163,7 @@ class ModSpec extends Specification {
 
         then:
         mod.level == 9
-        mod.creditsSpent == 37900
+        mod.creditsSpent == 30400
         mod.secondaries[0].visible
         mod.secondaries[1].visible
         mod.secondaries[2].visible
@@ -175,7 +175,7 @@ class ModSpec extends Specification {
 
         then:
         mod.level == 12
-        mod.creditsSpent == 86200
+        mod.creditsSpent == 78700
         mod.secondaries[0].visible
         mod.secondaries[1].visible
         mod.secondaries[2].visible
@@ -189,8 +189,9 @@ class ModSpec extends Specification {
         mod.color == Mod.Color.GRAY
         mod.level == 15
         mod.energySpent == 16
-        mod.creditsSpent == 248400
+        mod.creditsSpent == 240900
         mod.secondaries[0].value == 5
+        mod.secondaries[0].count == 1
         mod.creditValueIfSold() == 97200
 
         when:
@@ -206,8 +207,9 @@ class ModSpec extends Specification {
         1 * randomizer.randomSecondaryToIncrease() >> 0
         mod.color == Mod.Color.GREEN
         mod.energySpent == 118
-        mod.creditsSpent == 266400
+        mod.creditsSpent == 248700
         mod.secondaries[0].value == 9
+        mod.secondaries[0].count == 2
 
         when:
         mod.slice()
@@ -216,8 +218,9 @@ class ModSpec extends Specification {
         1 * randomizer.randomSecondaryToIncrease() >> 1
         mod.color == Mod.Color.BLUE
         mod.energySpent == 322
-        mod.creditsSpent == 302400
+        mod.creditsSpent == 264300
         mod.secondaries[0].value == 9
+        mod.secondaries[0].count == 2
 
         when:
         mod.slice()
@@ -226,8 +229,9 @@ class ModSpec extends Specification {
         1 * randomizer.randomSecondaryToIncrease() >> 0
         mod.color == Mod.Color.PURPLE
         mod.energySpent == 678
-        mod.creditsSpent == 365400
+        mod.creditsSpent == 291700
         mod.secondaries[0].value == 13
+        mod.secondaries[0].count == 3
 
         when:
         mod.slice()
@@ -236,8 +240,9 @@ class ModSpec extends Specification {
         1 * randomizer.randomSecondaryToIncrease() >> 0
         mod.color == Mod.Color.GOLD
         mod.energySpent == 1186
-        mod.creditsSpent == 455400
+        mod.creditsSpent == 330900
         mod.secondaries[0].value == 17
+        mod.secondaries[0].count == 4
 
         and:
         mod.dot == Mod.Dot.FIVE
@@ -271,7 +276,7 @@ class ModSpec extends Specification {
 
         expect:
         mod.level == 1
-        mod.creditsSpent == 0
+        mod.creditsSpent == -7500
         mod.secondaries[0].visible
         !mod.secondaries[1].visible
         !mod.secondaries[2].visible
@@ -282,7 +287,7 @@ class ModSpec extends Specification {
 
         then:
         mod.level == 3
-        mod.creditsSpent == 6900
+        mod.creditsSpent == -600
         mod.secondaries[0].visible
         mod.secondaries[1].visible
         !mod.secondaries[2].visible
@@ -293,7 +298,7 @@ class ModSpec extends Specification {
 
         then:
         mod.level == 6
-        mod.creditsSpent == 18400
+        mod.creditsSpent == 10900
         mod.secondaries[0].visible
         mod.secondaries[1].visible
         mod.secondaries[2].visible
@@ -304,7 +309,7 @@ class ModSpec extends Specification {
 
         then:
         mod.level == 9
-        mod.creditsSpent == 37900
+        mod.creditsSpent == 30400
         mod.secondaries[0].visible
         mod.secondaries[1].visible
         mod.secondaries[2].visible
@@ -316,9 +321,10 @@ class ModSpec extends Specification {
         then:
         1 * randomizer.randomSecondaryToIncrease() >> 0
         mod.level == 12
-        mod.creditsSpent == 86200
+        mod.creditsSpent == 78700
         mod.secondaries[0].visible
         mod.secondaries[0].value == 9
+        mod.secondaries[0].count == 2
         mod.secondaries[1].visible
         mod.secondaries[2].visible
         mod.secondaries[3].visible
@@ -330,8 +336,9 @@ class ModSpec extends Specification {
         mod.color == Mod.Color.GREEN
         mod.level == 15
         mod.energySpent == 16
-        mod.creditsSpent == 248400
+        mod.creditsSpent == 240900
         mod.secondaries[0].value == 9
+        mod.secondaries[0].count == 2
 
         when:
         mod.increaseLevel()
@@ -346,8 +353,9 @@ class ModSpec extends Specification {
         1 * randomizer.randomSecondaryToIncrease() >> 1
         mod.color == Mod.Color.BLUE
         mod.energySpent == 220
-        mod.creditsSpent == 284400
+        mod.creditsSpent == 256500
         mod.secondaries[0].value == 9
+        mod.secondaries[0].count == 2
 
         when:
         mod.slice()
@@ -356,8 +364,9 @@ class ModSpec extends Specification {
         1 * randomizer.randomSecondaryToIncrease() >> 0
         mod.color == Mod.Color.PURPLE
         mod.energySpent == 576
-        mod.creditsSpent == 347400
+        mod.creditsSpent == 283900
         mod.secondaries[0].value == 13
+        mod.secondaries[0].count == 3
 
         when:
         mod.slice()
@@ -366,8 +375,9 @@ class ModSpec extends Specification {
         1 * randomizer.randomSecondaryToIncrease() >> 0
         mod.color == Mod.Color.GOLD
         mod.energySpent == 1084
-        mod.creditsSpent == 437400
+        mod.creditsSpent == 323100
         mod.secondaries[0].value == 17
+        mod.secondaries[0].count == 4
 
         and:
         mod.dot == Mod.Dot.FIVE
@@ -400,7 +410,7 @@ class ModSpec extends Specification {
 
         expect:
         mod.level == 1
-        mod.creditsSpent == 0
+        mod.creditsSpent == -7500
         mod.secondaries[0].visible
         mod.secondaries[1].visible
         !mod.secondaries[2].visible
@@ -411,7 +421,7 @@ class ModSpec extends Specification {
 
         then:
         mod.level == 3
-        mod.creditsSpent == 6900
+        mod.creditsSpent == -600
         mod.secondaries[0].visible
         mod.secondaries[1].visible
         mod.secondaries[2].visible
@@ -422,7 +432,7 @@ class ModSpec extends Specification {
 
         then:
         mod.level == 6
-        mod.creditsSpent == 18400
+        mod.creditsSpent == 10900
         mod.secondaries[0].visible
         mod.secondaries[1].visible
         mod.secondaries[2].visible
@@ -434,9 +444,10 @@ class ModSpec extends Specification {
         then:
         1 * randomizer.randomSecondaryToIncrease() >> 0
         mod.level == 9
-        mod.creditsSpent == 37900
+        mod.creditsSpent == 30400
         mod.secondaries[0].visible
         mod.secondaries[0].value == 9
+        mod.secondaries[0].count == 2
         mod.secondaries[1].visible
         mod.secondaries[2].visible
         mod.secondaries[3].visible
@@ -447,9 +458,10 @@ class ModSpec extends Specification {
         then:
         1 * randomizer.randomSecondaryToIncrease() >> 1
         mod.level == 12
-        mod.creditsSpent == 86200
+        mod.creditsSpent == 78700
         mod.secondaries[0].visible
         mod.secondaries[0].value == 9
+        mod.secondaries[0].count == 2
         mod.secondaries[1].visible
         mod.secondaries[2].visible
         mod.secondaries[3].visible
@@ -461,8 +473,9 @@ class ModSpec extends Specification {
         mod.color == Mod.Color.BLUE
         mod.level == 15
         mod.energySpent == 16
-        mod.creditsSpent == 248400
+        mod.creditsSpent == 240900
         mod.secondaries[0].value == 9
+        mod.secondaries[0].count == 2
 
         when:
         mod.increaseLevel()
@@ -477,8 +490,9 @@ class ModSpec extends Specification {
         1 * randomizer.randomSecondaryToIncrease() >> 0
         mod.color == Mod.Color.PURPLE
         mod.energySpent == 372
-        mod.creditsSpent == 311400
+        mod.creditsSpent == 268300
         mod.secondaries[0].value == 13
+        mod.secondaries[0].count == 3
 
         when:
         mod.slice()
@@ -487,8 +501,9 @@ class ModSpec extends Specification {
         1 * randomizer.randomSecondaryToIncrease() >> 1
         mod.color == Mod.Color.GOLD
         mod.energySpent == 880
-        mod.creditsSpent == 401400
+        mod.creditsSpent == 307500
         mod.secondaries[0].value == 13
+        mod.secondaries[0].count == 3
 
         and:
         mod.dot == Mod.Dot.FIVE
@@ -521,7 +536,7 @@ class ModSpec extends Specification {
 
         expect:
         mod.level == 1
-        mod.creditsSpent == 0
+        mod.creditsSpent == -7500
         mod.secondaries[0].visible
         mod.secondaries[1].visible
         mod.secondaries[2].visible
@@ -532,7 +547,7 @@ class ModSpec extends Specification {
 
         then:
         mod.level == 3
-        mod.creditsSpent == 6900
+        mod.creditsSpent == -600
         mod.secondaries[0].visible
         mod.secondaries[1].visible
         mod.secondaries[2].visible
@@ -544,9 +559,10 @@ class ModSpec extends Specification {
         then:
         1 * randomizer.randomSecondaryToIncrease() >> 0
         mod.level == 6
-        mod.creditsSpent == 18400
+        mod.creditsSpent == 10900
         mod.secondaries[0].visible
         mod.secondaries[0].value == 9
+        mod.secondaries[0].count == 2
         mod.secondaries[1].visible
         mod.secondaries[2].visible
         mod.secondaries[3].visible
@@ -557,9 +573,10 @@ class ModSpec extends Specification {
         then:
         1 * randomizer.randomSecondaryToIncrease() >> 1
         mod.level == 9
-        mod.creditsSpent == 37900
+        mod.creditsSpent == 30400
         mod.secondaries[0].visible
         mod.secondaries[0].value == 9
+        mod.secondaries[0].count == 2
         mod.secondaries[1].visible
         mod.secondaries[2].visible
         mod.secondaries[3].visible
@@ -570,9 +587,10 @@ class ModSpec extends Specification {
         then:
         1 * randomizer.randomSecondaryToIncrease() >> 0
         mod.level == 12
-        mod.creditsSpent == 86200
+        mod.creditsSpent == 78700
         mod.secondaries[0].visible
         mod.secondaries[0].value == 13
+        mod.secondaries[0].count == 3
         mod.secondaries[1].visible
         mod.secondaries[2].visible
         mod.secondaries[3].visible
@@ -584,8 +602,9 @@ class ModSpec extends Specification {
         mod.color == Mod.Color.PURPLE
         mod.level == 15
         mod.energySpent == 16
-        mod.creditsSpent == 248400
+        mod.creditsSpent == 240900
         mod.secondaries[0].value == 13
+        mod.secondaries[0].count == 3
 
         when:
         mod.increaseLevel()
@@ -600,8 +619,9 @@ class ModSpec extends Specification {
         1 * randomizer.randomSecondaryToIncrease() >> 0
         mod.color == Mod.Color.GOLD
         mod.energySpent == 524
-        mod.creditsSpent == 338400
+        mod.creditsSpent == 280100
         mod.secondaries[0].value == 17
+        mod.secondaries[0].count == 4
 
         and:
         mod.dot == Mod.Dot.FIVE
@@ -634,7 +654,7 @@ class ModSpec extends Specification {
 
         expect:
         mod.level == 1
-        mod.creditsSpent == 0
+        mod.creditsSpent == -7500
         mod.secondaries[0].visible
         mod.secondaries[1].visible
         mod.secondaries[2].visible
@@ -646,9 +666,10 @@ class ModSpec extends Specification {
         then:
         1 * randomizer.randomSecondaryToIncrease() >> 0
         mod.level == 3
-        mod.creditsSpent == 6900
+        mod.creditsSpent == -600
         mod.secondaries[0].visible
         mod.secondaries[0].value == 9
+        mod.secondaries[0].count == 2
         mod.secondaries[1].visible
         mod.secondaries[2].visible
         mod.secondaries[3].visible
@@ -659,9 +680,10 @@ class ModSpec extends Specification {
         then:
         1 * randomizer.randomSecondaryToIncrease() >> 0
         mod.level == 6
-        mod.creditsSpent == 18400
+        mod.creditsSpent == 10900
         mod.secondaries[0].visible
         mod.secondaries[0].value == 13
+        mod.secondaries[0].count == 3
         mod.secondaries[1].visible
         mod.secondaries[2].visible
         mod.secondaries[3].visible
@@ -672,9 +694,10 @@ class ModSpec extends Specification {
         then:
         1 * randomizer.randomSecondaryToIncrease() >> 1
         mod.level == 9
-        mod.creditsSpent == 37900
+        mod.creditsSpent == 30400
         mod.secondaries[0].visible
         mod.secondaries[0].value == 13
+        mod.secondaries[0].count == 3
         mod.secondaries[1].visible
         mod.secondaries[2].visible
         mod.secondaries[3].visible
@@ -685,9 +708,10 @@ class ModSpec extends Specification {
         then:
         1 * randomizer.randomSecondaryToIncrease() >> 0
         mod.level == 12
-        mod.creditsSpent == 86200
+        mod.creditsSpent == 78700
         mod.secondaries[0].visible
         mod.secondaries[0].value == 17
+        mod.secondaries[0].count == 4
         mod.secondaries[1].visible
         mod.secondaries[2].visible
         mod.secondaries[3].visible
@@ -699,8 +723,9 @@ class ModSpec extends Specification {
         mod.color == Mod.Color.GOLD
         mod.level == 15
         mod.energySpent == 16
-        mod.creditsSpent == 248400
+        mod.creditsSpent == 240900
         mod.secondaries[0].value == 17
+        mod.secondaries[0].count == 4
 
         and:
         mod.dot == Mod.Dot.FIVE
@@ -750,6 +775,7 @@ class ModSpec extends Specification {
         mod.creditsSpent == 3916900
         mod.secondaries[0].visible
         mod.secondaries[0].value == 9
+        mod.secondaries[0].count == 2
         mod.secondaries[1].visible
         mod.secondaries[2].visible
         mod.secondaries[3].visible
@@ -763,6 +789,7 @@ class ModSpec extends Specification {
         mod.creditsSpent == 3928400
         mod.secondaries[0].visible
         mod.secondaries[0].value == 13
+        mod.secondaries[0].count == 3
         mod.secondaries[1].visible
         mod.secondaries[2].visible
         mod.secondaries[3].visible
@@ -776,6 +803,7 @@ class ModSpec extends Specification {
         mod.creditsSpent == 3947900
         mod.secondaries[0].visible
         mod.secondaries[0].value == 13
+        mod.secondaries[0].count == 3
         mod.secondaries[1].visible
         mod.secondaries[2].visible
         mod.secondaries[3].visible
@@ -789,6 +817,7 @@ class ModSpec extends Specification {
         mod.creditsSpent == 3996200
         mod.secondaries[0].visible
         mod.secondaries[0].value == 17
+        mod.secondaries[0].count == 4
         mod.secondaries[1].visible
         mod.secondaries[2].visible
         mod.secondaries[3].visible
@@ -802,6 +831,7 @@ class ModSpec extends Specification {
         mod.energySpent == 0
         mod.creditsSpent == 4158400
         mod.secondaries[0].value == 17
+        mod.secondaries[0].count == 4
 
         and:
         mod.dot == Mod.Dot.FIVE
@@ -831,6 +861,7 @@ class ModSpec extends Specification {
         ])
 
         then:
+        !mod1.visibleSpeedSecondary().isPresent()
         mod1.visibleSpeed() == 0
 
         when:
@@ -842,6 +873,7 @@ class ModSpec extends Specification {
         ])
 
         then:
+        !mod2.visibleSpeedSecondary().isPresent()
         mod2.visibleSpeed() == 0
 
         when:
@@ -853,6 +885,7 @@ class ModSpec extends Specification {
         ])
 
         then:
+        mod3.visibleSpeedSecondary().isPresent()
         mod3.visibleSpeed() == 5
     }
 
