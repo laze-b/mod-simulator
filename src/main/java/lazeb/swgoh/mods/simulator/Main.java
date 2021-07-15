@@ -14,20 +14,33 @@ public class Main {
 
     public static void main(String[] args) {
         long time = System.currentTimeMillis();
+//        runSmokeTest();
         runMultiPassSimulation();
         System.out.println("Simulation took " + (System.currentTimeMillis() - time) + "ms");
     }
 
     private static void runSmokeTest() {
         List<Results> results = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            results.add(new Simulator(new Strategy(
-                    2, 4, 4, 4,
-                    5, 7, 9, 9, 15,
-                    15
-            ), new Randomizer()).simulate(2500));
+        List<Strategy> strategies = new ArrayList<>();
+        strategies.add(new Strategy(
+                2, 4, 4, 4,
+                5, 8, 10, 10, 12,
+                12
+        ));
+        strategies.add(new Strategy(
+                2, 4, 4, 4,
+                5, 8, 10, 12, 12,
+                12
+        ));
+        // maw
+        strategies.add(new Strategy(
+                2, 4, 4, 4,
+                5, 8, 12, 14, 12,
+                12
+        ));
+        for (Strategy strategy : strategies) {
+            results.add(new Simulator(strategy, new Randomizer()).simulate(2500));
         }
-        results.sort(Comparator.reverseOrder());
         printResults(results, "Results:");
 
         /*

@@ -10,7 +10,8 @@ public class Results implements Comparable<Results> {
 
     private long farmedMods;
     private long storeMods;
-    private long keptMods;
+    private long keptFarmedMods;
+    private long keptStoreMods;
     // [key=speed, value=[key=speedIncreases, value=numMods]]
     private Map<Integer, Map<Integer, Integer>> speedMap = new TreeMap<>();
     private long speedArrows;
@@ -59,8 +60,7 @@ public class Results implements Comparable<Results> {
         double score = 0;
         for (int speed : speedMap.keySet()) {
             int count = speedMap.get(speed).values().stream().mapToInt(i -> i).sum();
-            // fitted function so speed 15=1, 20=2, 25=4
-            score += count * getCurrentSpeedValue(speed);
+            score += count * getSpeedValue(speed, 10);
         }
         return score;
     }
@@ -74,27 +74,37 @@ public class Results implements Comparable<Results> {
             Map<Integer, Integer> speedIncreaseMap = speedMap.get(speed);
             for (int speedIncreases : speedIncreaseMap.keySet()) {
                 int count = speedIncreaseMap.get(speedIncreases);
-                score += count * getCurrentAndPotentialSpeedValue(speed, speedIncreases);
+                score += count * getCurrentAndPotentialSpeedValue(speed, speedIncreases, strategy.minKeepSpeed);
             }
         }
         return score;
     }
 
-    private static double getCurrentSpeedValue(int speed) {
-        // current value: fitted function so speed 15=1, 20=3, 25=6
-        return speed < 15 ? 0 : 1 + 0.08 * Math.pow(speed - 15, 2);
+    private static double getSpeedValue(double speed, int minSpeedWithValue) {
+        if (speed < minSpeedWithValue) {
+            return 0;
+        } else {
+            return Math.pow(speed - minSpeedWithValue + 1, 3);
+        }
     }
 
-    private static double getCurrentAndPotentialSpeedValue(int speed, int speedIncreases) {
-        // potential value: same as current, but scaled down
-        int potentialSpeed = speed + 4 * (4 - speedIncreases) + 2 * (5 - speedIncreases);
-        double value = 0;
-        if(speed >= 15) {
-            value += getCurrentSpeedValue(speed);
-            if(potentialSpeed > speed)
-                value += 0.3 * getCurrentSpeedValue(potentialSpeed);
+    private static double getCurrentAndPotentialSpeedValue(int speed, int speedIncreases, int minSpeedWithValue) {
+        double value = getSpeedValue(speed, minSpeedWithValue);
+        // potential value: probability of speed slices * expected speed, and discounted for cost of mats
+        // has to meet threshold of 17/3 or 18/4 to consider
+        double addedValue = 0;
+        double discount = 0.75;
+        if(speedIncreases == 4 && speed >= 18) {
+            double probSpeedSlice = 0.68;
+            double avgSpeedIncrease = probSpeedSlice * 4.5;
+            addedValue = getSpeedValue(speed + avgSpeedIncrease, minSpeedWithValue) - value;
+        } else if (speedIncreases == 3 && speed >= 17) {
+            double probSingleSpeedSlice = 0.42;
+            double probDoubleSpeedSlice = 0.26;
+            double avgSpeedIncrease = probSingleSpeedSlice * 4.5 + probDoubleSpeedSlice * 9;
+            addedValue = getSpeedValue(speed + avgSpeedIncrease, minSpeedWithValue) - value;
         }
-        return value;
+        return value + discount * addedValue;
     }
 
     void addMod(Mod mod, boolean keep) {
@@ -104,7 +114,11 @@ public class Results implements Comparable<Results> {
             farmedMods++;
         }
         if (keep) {
-            keptMods++;
+            if (mod.isFromStore()) {
+                keptStoreMods++;
+            } else {
+                keptFarmedMods++;
+            }
             if (mod.getPrimary().getStat() == Mod.PrimaryStat.SPEED) {
                 speedArrows++;
             } else {
@@ -126,7 +140,8 @@ public class Results implements Comparable<Results> {
                 ", strategy=" + strategy +
                 ", farmedMods=" + farmedMods +
                 ", storeMods=" + storeMods +
-                ", keptMods=" + keptMods +
+                ", keptFarmedMods=" + keptFarmedMods +
+                ", keptStoreMods=" + keptStoreMods +
                 ", speedMap=" + speedMap +
                 ", speedArrows=" + speedArrows +
                 ", numMonths=" + numMonths +

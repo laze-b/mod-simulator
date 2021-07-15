@@ -22,7 +22,7 @@ class Strategy {
 
     // tweak these to match what you want to invest daily
     final int modEnergyDailyRefreshes = 3;
-    final int modCreditDailyBudget = 1_000_000;
+    final int modCreditDailyBudget = 750_000;
 
     Strategy(int grayInitialSecondaries, int greenInitialSecondaries, int blueInitialSecondaries, int purpleInitialSecondaries, int graySliceSpeed, int greenSliceSpeed, int blueSliceSpeed, int purpleSliceSpeed, int goldTargetLevel, int minKeepSpeed) {
         this.grayInitialSecondaries = grayInitialSecondaries;
