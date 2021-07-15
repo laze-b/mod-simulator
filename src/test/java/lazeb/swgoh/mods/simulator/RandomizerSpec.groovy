@@ -34,16 +34,16 @@ class RandomizerSpec extends Specification {
         double pctGold = colors.findAll { it == Mod.Color.GOLD }.size() * 1.0 / colors.size()
 
         then:
-        pctGray > 0.62
-        pctGray < 0.64
-        pctGreen > 0.17
-        pctGreen < 0.19
-        pctBlue > 0.10
-        pctBlue < 0.12
-        pctPurple > 0.04
-        pctPurple < 0.06
-        pctGold > 0.02
-        pctGold < 0.04
+        pctGray > 0.64
+        pctGray < 0.65
+        pctGreen > 0.18
+        pctGreen < 0.20
+        pctBlue > 0.09
+        pctBlue < 0.11
+        pctPurple > 0.03
+        pctPurple < 0.05
+        pctGold > 0.01
+        pctGold < 0.03
     }
 
     def "random mod primary has the right distribution"() {
@@ -125,16 +125,16 @@ class RandomizerSpec extends Specification {
         double pctSpeed5 = with5Speed * 1.0 / withSpeed
 
         then:
-        pctWithSpeed > 0.27
-        pctWithSpeed < 0.28
+        pctWithSpeed > 0.36
+        pctWithSpeed < 0.37
         pctSpeedVisible >= pctSpeedVisibleLower
         pctSpeedVisible <= pctSpeedVisibleUpper
-        pctSpeed3 > 0.33
-        pctSpeed3 < 0.34
-        pctSpeed4 > 0.33
-        pctSpeed4 < 0.34
-        pctSpeed5 > 0.33
-        pctSpeed5 < 0.34
+        pctSpeed3 > 0.30
+        pctSpeed3 < 0.31
+        pctSpeed4 > 0.34
+        pctSpeed4 < 0.35
+        pctSpeed5 > 0.35
+        pctSpeed5 < 0.36
 
         where:
         color            | pctSpeedVisibleLower | pctSpeedVisibleUpper
@@ -158,13 +158,13 @@ class RandomizerSpec extends Specification {
         double pct6Speed = speeds.findAll { it == 6 }.size() * 1.0 / speeds.size()
 
         then:
-        pct3Speed > 0.22
-        pct3Speed < 0.24
-        pct4Speed > 0.31
-        pct4Speed < 0.33
-        pct5Speed > 0.29
-        pct5Speed < 0.31
-        pct6Speed > 0.14
-        pct6Speed < 0.16
+        pct3Speed > 0.18
+        pct3Speed < 0.20
+        pct4Speed > 0.34
+        pct4Speed < 0.36
+        pct5Speed > 0.37
+        pct5Speed < 0.39
+        pct6Speed > 0.07
+        pct6Speed < 0.09
     }
 }

@@ -32,3 +32,14 @@ See the getScore method in [Results.java](src/main/java/lazeb/swgoh/mods/simulat
 
 # Game probabilities
 Assumptions about underlying game probabilities can be found in [Const.java](src/main/java/lazeb/swgoh/mods/simulator/Const.java)
+
+# Results
+Current testing recommends the following strategies for the given min speed targets. Anything under this speed should be sold. A different
+strategy per shape may be used depending on your speed targets (e.g. crit damage triangles may have a lower min speed goal). This was computed using a mod
+value function of (speed over min)^3 + 0.75 * speed_potential.
+
+| Min speed goal | Gray secondary reveals | Other secondary reveals | Min gray slice speed | Min green slice speed | Min blue slice speed | Min purple slice speed |  
+| -------------- | ---------------------- | ----------------------- | -------------------- | --------------------- | -------------------- | ---------------------- |
+| 10             | 3                      | all                     | 5                    | 8                     | 9                    | 12                     |
+| 12             | 2                      | all                     | 5                    | 8                     | 10                   | 13                     |
+| 14             | 2                      | all                     | 5                    | 8                     | 10                   | 13                     |

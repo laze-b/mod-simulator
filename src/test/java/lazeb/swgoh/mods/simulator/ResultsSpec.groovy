@@ -41,7 +41,7 @@ class ResultsSpec extends Specification {
         Results results = new Results(
                 10,
                 new Strategy(0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0),
+                        0, 0, 0, 0, 0, 10),
                 new Resources(100, 100000)
         )
 
@@ -108,13 +108,13 @@ class ResultsSpec extends Specification {
         results.addMod(getMod(20, 4), true)
 
         then:
-        results.getWeightedSpeedPlusPotentialValue() > 25049 && results.getWeightedSpeedPlusPotentialValue() < 25050
+        results.getWeightedSpeedPlusPotentialValue() > 24918 && results.getWeightedSpeedPlusPotentialValue() < 24919
 
         when:
         results.addMod(getMod(25, 5), true)
 
         then:
-        results.getWeightedSpeedPlusPotentialValue() > 42625 && results.getWeightedSpeedPlusPotentialValue() < 42626
+        results.getWeightedSpeedPlusPotentialValue() > 42494 && results.getWeightedSpeedPlusPotentialValue() < 42495
     }
 
     @Unroll
@@ -177,18 +177,18 @@ class ResultsSpec extends Specification {
         18    | 5         | 729.0      | 729.01
         19    | 5         | 1000.0     | 1000.01
         20    | 5         | 1331.0     | 1331.01
-        18    | 4         | 1497.78    | 1497.79
-        17    | 3         | 1499.95    | 1499.96
+        17    | 3         | 1453.66    | 1453.67
+        18    | 4         | 1465.12    | 1465.13
         21    | 5         | 1728.0     | 1728.01
-        19    | 4         | 1920.67    | 1920.68
+        19    | 4         | 1882.34    | 1882.35
         22    | 5         | 2197.0     | 2197.01
-        20    | 4         | 2417.32    | 2417.33
+        20    | 4         | 2372.87    | 2372.88
         23    | 5         | 2744.0     | 2744.01
-        21    | 4         | 2993.74    | 2993.75
+        21    | 4         | 2942.73    | 2942.74
         24    | 5         | 3375.0     | 3375.01
-        22    | 4         | 3655.93    | 3655.94
+        22    | 4         | 3597.9     | 3597.91
         25    | 5         | 4096.0     | 4096.01
-        23    | 4         | 4409.9     | 4409.91
+        23    | 4         | 4344.38    | 4344.39
         26    | 5         | 4913.0     | 4913.01
         27    | 5         | 5832.0     | 5832.01
         28    | 5         | 6859.0     | 6859.01

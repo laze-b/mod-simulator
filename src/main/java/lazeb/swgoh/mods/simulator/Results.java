@@ -60,7 +60,7 @@ public class Results implements Comparable<Results> {
         double score = 0;
         for (int speed : speedMap.keySet()) {
             int count = speedMap.get(speed).values().stream().mapToInt(i -> i).sum();
-            score += count * getSpeedValue(speed, 10);
+            score += count * getSpeedValue(speed, strategy.minKeepSpeed);
         }
         return score;
     }
@@ -96,12 +96,12 @@ public class Results implements Comparable<Results> {
         double discount = 0.75;
         if(speedIncreases == 4 && speed >= 18) {
             double probSpeedSlice = 0.68;
-            double avgSpeedIncrease = probSpeedSlice * 4.5;
+            double avgSpeedIncrease = probSpeedSlice * Const.avgSpeedSlice();
             addedValue = getSpeedValue(speed + avgSpeedIncrease, minSpeedWithValue) - value;
         } else if (speedIncreases == 3 && speed >= 17) {
             double probSingleSpeedSlice = 0.42;
             double probDoubleSpeedSlice = 0.26;
-            double avgSpeedIncrease = probSingleSpeedSlice * 4.5 + probDoubleSpeedSlice * 9;
+            double avgSpeedIncrease = probSingleSpeedSlice * Const.avgSpeedSlice() + probDoubleSpeedSlice * Const.avgSpeedSlice() * 2;
             addedValue = getSpeedValue(speed + avgSpeedIncrease, minSpeedWithValue) - value;
         }
         return value + discount * addedValue;
