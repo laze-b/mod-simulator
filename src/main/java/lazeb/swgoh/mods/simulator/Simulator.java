@@ -24,10 +24,12 @@ class Simulator {
 
     private final Strategy strategy;
     private final Randomizer randomizer;
+    private final ModValueFunction modValueFunction;
 
-    Simulator(Strategy strategy, Randomizer randomizer) {
+    Simulator(Strategy strategy, Randomizer randomizer, ModValueFunction modValueFunction) {
         this.strategy = strategy;
         this.randomizer = randomizer;
+        this.modValueFunction = modValueFunction;
     }
 
     Results simulate(int numYears) {
@@ -35,7 +37,7 @@ class Simulator {
         int numDays = 365 * numYears;
         long dailyEnergyBudget = (240 + strategy.modEnergyDailyRefreshes * 120);
         Resources resources = new Resources(dailyEnergyBudget, strategy.modCreditDailyBudget);
-        Results results = new Results(numMonths, strategy, resources);
+        Results results = new Results(numMonths, strategy, resources, modValueFunction);
 
         for (int i = 0; i < numDays; i++) {
             resources.addDailyResources();

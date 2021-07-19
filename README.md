@@ -35,11 +35,69 @@ Assumptions about underlying game probabilities can be found in [Const.java](src
 
 # Results
 Current testing recommends the following strategies for the given min speed targets. Anything under this speed should be sold. A different
-strategy per shape may be used depending on your speed targets (e.g. crit damage triangles may have a lower min speed goal). This was computed using a mod
-value function of (speed over min)^3 + 0.75 * speed_potential.
+strategy per shape may be used depending on your speed targets (e.g. crit damage triangles may have a lower min speed goal). 
+Current results for value function: 2^(speed/2) + potential speed
 
-| Min speed goal | Gray secondary reveals | Other secondary reveals | Min gray slice speed | Min green slice speed | Min blue slice speed | Min purple slice speed |  
+| Speed | Increases |    Value    |
+| ----- | --------- | ----------- |
+|   0   |     0     |        1    |
+|   1   |     1     |        1    |
+|   2   |     1     |        2    |
+|   3   |     1     |        3    |
+|   4   |     1     |        4    |
+|   5   |     1     |        6    |
+|   6   |     2     |        8    |
+|   7   |     2     |       11    |
+|   8   |     2     |       16    |
+|   9   |     2     |       23    |
+|   9   |     3     |       23    |
+|  10   |     2     |       32    |
+|  10   |     3     |       32    |
+|  11   |     2     |       45    |
+|  11   |     3     |       45    |
+|  12   |     3     |       64    |
+|  12   |     4     |       64    |
+|  13   |     3     |       91    |
+|  13   |     4     |       91    |
+|  14   |     3     |      128    |
+|  14   |     4     |      128    |
+|  15   |     3     |      181    |
+|  15   |     4     |      181    |
+|  15   |     5     |      181    |
+|  16   |     3     |      256    |
+|  16   |     4     |      256    |
+|  16   |     5     |      256    |
+|  17   |     4     |      362    |
+|  17   |     5     |      362    |
+|  18   |     5     |      512    |
+|  19   |     5     |      724    |
+|  20   |     5     |     1024    |
+|  18   |     4     |     1199    |
+|  17   |     3     |     1211    |
+|  21   |     5     |     1448    |
+|  19   |     4     |     1696    |
+|  22   |     5     |     2048    |
+|  20   |     4     |     2398    |
+|  23   |     5     |     2896    |
+|  21   |     4     |     3391    |
+|  24   |     5     |     4096    |
+|  22   |     4     |     4796    |
+|  25   |     5     |     5793    |
+|  23   |     4     |     6782    |
+|  26   |     5     |     8192    |
+|  27   |     5     |    11585    |
+|  28   |     5     |    16384    |
+|  29   |     5     |    23170    |
+
+
+Simulation results:
+
+| Min speed goal | Gray secondary reveals | Other secondary reveals | Min gray slice speed | Min green slice speed | Min blue slice speed | Min purple slice speed |
 | -------------- | ---------------------- | ----------------------- | -------------------- | --------------------- | -------------------- | ---------------------- |
-| 10             | 3                      | all                     | 5                    | 8                     | 9                    | 12                     |
-| 12             | 2                      | all                     | 5                    | 8                     | 10                   | 13                     |
-| 14             | 2                      | all                     | 5                    | 8                     | 10                   | 13                     |
+|  3             |  3                     | all                     |  5                   |  9                    | 10                   | 13                     |
+|  5             |  2                     | all                     |  5                   |  8                    | 10                   | 13                     |
+|  7             |  1                     | all                     |  5                   |  8                    | 10                   | 13                     |
+|  9             |  1                     | all                     |  5                   |  8                    | 10                   | 13                     |
+| 11             |  2                     | all                     |  5                   |  8                    | 10                   | 12                     |
+| 13             |  3                     | all                     |  5                   |  8                    | 10                   | 12                     |
+| 15             |  3                     | all                     |  5                   |  8                    | 10                   | 12                     |

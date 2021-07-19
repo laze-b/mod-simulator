@@ -131,7 +131,7 @@ class RandomizerSpec extends Specification {
         pctSpeedVisible <= pctSpeedVisibleUpper
         pctSpeed3 > 0.30
         pctSpeed3 < 0.31
-        pctSpeed4 > 0.34
+        pctSpeed4 > 0.33
         pctSpeed4 < 0.35
         pctSpeed5 > 0.35
         pctSpeed5 < 0.36

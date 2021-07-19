@@ -47,8 +47,8 @@ class Strategy {
             assertBetween(3, 12, greenSliceSpeed);
             assertBetween(3, 18, blueSliceSpeed);
             assertBetween(3, 24, purpleSliceSpeed);
-            assertBetween(3, 29, goldTargetLevel);
-            assertBetween(3, 29, minKeepSpeed);
+            assertBetween(0, 29, goldTargetLevel);
+            assertBetween(0, 29, minKeepSpeed);
             assertTrue(graySliceSpeed + 24 >= minKeepSpeed);
             assertTrue(graySliceSpeed + 6 >= greenSliceSpeed);
             assertTrue(graySliceSpeed <= greenSliceSpeed);

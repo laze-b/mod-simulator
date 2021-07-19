@@ -10,31 +10,31 @@ class StrategyGenerator {
     private List<Strategy> strategies;
     private int currentStrategy = 0;
 
-    StrategyGenerator() {
-        generateAllStrategies();
+    StrategyGenerator(int minSpeed) {
+        generateAllStrategies(minSpeed);
     }
 
     StrategyGenerator(List<Strategy> strategies) {
         this.strategies = strategies;
     }
 
-    private void generateAllStrategies() {
+    private void generateAllStrategies(int minSpeed) {
         strategies = new ArrayList<>();
         Supplier<Iterator<Integer>> grayInitialSecondariesSupplier = () -> new RangeIterator(0, 4);
-        Supplier<Iterator<Integer>> greenInitialSecondariesSupplier = () -> new RangeIterator(1, 4);
+        Supplier<Iterator<Integer>> greenInitialSecondariesSupplier = () -> new RangeIterator(4, 4);
         // Assume we always want to reveal all blue/purple secondaries
         Supplier<Iterator<Integer>> blueInitialSecondariesSupplier = () -> new RangeIterator(4, 4);
         Supplier<Iterator<Integer>> purpleInitialSecondariesSupplier = () -> new RangeIterator(4, 4);
 
         // make some assumptions on "good" target slice speeds to narrow the iterations
         Supplier<Iterator<Integer>> graySliceSpeedSupplier = () -> new RangeIterator(3, 6);
-        Supplier<Iterator<Integer>> greenSliceSpeedSupplier = () -> new RangeIterator(5, 12);
-        Supplier<Iterator<Integer>> blueSliceSpeedSupplier = () -> new RangeIterator(7, 14);
-        Supplier<Iterator<Integer>> purpleSliceSpeedSupplier = () -> new RangeIterator(9, 14);
+        Supplier<Iterator<Integer>> greenSliceSpeedSupplier = () -> new RangeIterator(5, 10);
+        Supplier<Iterator<Integer>> blueSliceSpeedSupplier = () -> new RangeIterator(7, 12);
+        Supplier<Iterator<Integer>> purpleSliceSpeedSupplier = () -> new RangeIterator(9, 15);
 
         // to limit the number of iterations, assume we're going for >= 15 speed
-        Supplier<Iterator<Integer>> goldLevelSpeedSupplier = () -> new RangeIterator(12, 12);
-        Supplier<Iterator<Integer>> minKeepSpeedSupplier = () -> new RangeIterator(12, 12);
+        Supplier<Iterator<Integer>> goldLevelSpeedSupplier = () -> new RangeIterator(minSpeed, minSpeed);
+        Supplier<Iterator<Integer>> minKeepSpeedSupplier = () -> new RangeIterator(minSpeed, minSpeed);
 
         Iterator<Integer> grayInitialRange = grayInitialSecondariesSupplier.get();
         while (grayInitialRange.hasNext()) {

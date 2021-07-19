@@ -2,9 +2,7 @@ package lazeb.swgoh.mods.simulator;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 public class Results implements Comparable<Results> {
 
@@ -18,13 +16,16 @@ public class Results implements Comparable<Results> {
 
     private final int numMonths;
     private final Resources resources;
+    // function that takes in speedMap and returns valuation
+    private final ModValueFunction modValueFunction;
 
     final Strategy strategy;
 
-    Results(int numMonths, Strategy strategy, Resources resources) {
+    Results(int numMonths, Strategy strategy, Resources resources, ModValueFunction modValueFunction) {
         this.numMonths = numMonths;
         this.strategy = strategy;
         this.resources = resources;
+        this.modValueFunction = modValueFunction;
     }
 
     @Override
@@ -36,75 +37,15 @@ public class Results implements Comparable<Results> {
      * This is our optimization function. How well a given simulation did is based on maxing out this metric.
      */
     double getScore() {
-//        return getSpeedGreaterThanEqual(15) * 1.0 / numMonths;
-//        return getWeightedSpeedValue() / numMonths;
-        return getWeightedSpeedPlusPotentialValue() / numMonths;
-    }
-
-    /**
-     * Simple value function - count of speed over threshold.
-     */
-    long getSpeedGreaterThanEqual(int speed) {
-        Set<Integer> speeds = speedMap.keySet().stream().filter(k -> k >= speed).collect(Collectors.toSet());
-        int count = 0;
-        for (int nextSpeed : speeds) {
-            count += speedMap.get(nextSpeed).values().stream().mapToInt(i -> i).sum();
-        }
-        return count;
-    }
-
-    /**
-     * More complex value function taking individual speeds into account.
-     */
-    double getWeightedSpeedValue() {
-        double score = 0;
-        for (int speed : speedMap.keySet()) {
-            int count = speedMap.get(speed).values().stream().mapToInt(i -> i).sum();
-            score += count * getSpeedValue(speed, strategy.minKeepSpeed);
-        }
-        return score;
-    }
-
-    /**
-     * Even more complex value function taking speed + speed potential into account.
-     */
-    double getWeightedSpeedPlusPotentialValue() {
         double score = 0;
         for (int speed : speedMap.keySet()) {
             Map<Integer, Integer> speedIncreaseMap = speedMap.get(speed);
             for (int speedIncreases : speedIncreaseMap.keySet()) {
                 int count = speedIncreaseMap.get(speedIncreases);
-                score += count * getCurrentAndPotentialSpeedValue(speed, speedIncreases, strategy.minKeepSpeed);
+                score += count * modValueFunction.apply((double) speed, speedIncreases);
             }
         }
-        return score;
-    }
-
-    private static double getSpeedValue(double speed, int minSpeedWithValue) {
-        if (speed < minSpeedWithValue) {
-            return 0;
-        } else {
-            return Math.pow(speed - minSpeedWithValue + 1, 3);
-        }
-    }
-
-    private static double getCurrentAndPotentialSpeedValue(int speed, int speedIncreases, int minSpeedWithValue) {
-        double value = getSpeedValue(speed, minSpeedWithValue);
-        // potential value: probability of speed slices * expected speed, and discounted for cost of mats
-        // has to meet threshold of 17/3 or 18/4 to consider
-        double addedValue = 0;
-        double discount = 0.75;
-        if(speedIncreases == 4 && speed >= 18) {
-            double probSpeedSlice = 0.68;
-            double avgSpeedIncrease = probSpeedSlice * Const.avgSpeedSlice();
-            addedValue = getSpeedValue(speed + avgSpeedIncrease, minSpeedWithValue) - value;
-        } else if (speedIncreases == 3 && speed >= 17) {
-            double probSingleSpeedSlice = 0.42;
-            double probDoubleSpeedSlice = 0.26;
-            double avgSpeedIncrease = probSingleSpeedSlice * Const.avgSpeedSlice() + probDoubleSpeedSlice * Const.avgSpeedSlice() * 2;
-            addedValue = getSpeedValue(speed + avgSpeedIncrease, minSpeedWithValue) - value;
-        }
-        return value + discount * addedValue;
+        return score / numMonths;
     }
 
     void addMod(Mod mod, boolean keep) {
